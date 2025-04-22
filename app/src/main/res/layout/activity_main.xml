@@ -273,6 +273,45 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Rectangle Parameters:"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                />
+            <EditText
+                android:id="@+id/width_operand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:hint="0"
+                android:layout_weight="1"
+
+                android:textColorHint="@color/white"
+                android:layout_margin="2dp"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/length_operand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:hint="0"
+                android:textColorHint="@color/white"
+                android:layout_margin="2dp"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/button_ca"
                 style="@style/Widget.AppCompat.Button"

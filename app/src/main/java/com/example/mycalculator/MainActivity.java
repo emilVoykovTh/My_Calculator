@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,11 +24,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     buttonCA, buttonRectangle;
 
     /** Текстови полета*/
-    private TextView resultTV;
-    private TextView textFieldTV;
-    private String currentInput = "";  // Holds current number input
-    private String operator = "";  // Holds operator
-    private double firstNum = 0;  // First number in the operation
+    private TextView resultTV; //поле за резултат или аритметичен оператор
+    private TextView textFieldTV; //поле за изписване на числата
+    private String currentInput = "";  // Текущи входни данни
+    private String operator = "";
+    private double firstNum = 0;  // първо число в операцията
+
+    private EditText inputWidth;
+    private EditText inputHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /** Инициализация на бутони и текстови полета*/
         resultTV = findViewById(R.id.result_tv);
         textFieldTV = findViewById(R.id.textfield_view);
+        inputWidth = findViewById(R.id.width_operand);
+        inputHeight = findViewById(R.id.length_operand);
 
         assignID(button0, R.id.button_0);
         assignID(button1, R.id.button_1);
@@ -76,13 +82,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button button = (Button) v;
         String buttonText = button.getText().toString();
 
-        // Handle digit button clicks (0-9)
+        // Числа (0-9)
         if (buttonText.matches("[0-9]")) {
             currentInput += buttonText;
             resultTV.setText(currentInput);
         }
 
-        // Handle operator button clicks (+, -, *, /)
+        // Аритметични оператори (+, -, *, /)
         else if (buttonText.equals("+") || buttonText.equals("-") ||
                 buttonText.equals("*") || buttonText.equals("/")) {
             if (!currentInput.isEmpty()) {
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        // Handle "CA" (Clear All) button
+        // Ако "CA" - изтрий съдържание в двете текстови полета
         else if (buttonText.equals("CA")) {
             currentInput = "";
             operator = "";
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             textFieldTV.setText("");
         }
 
-        // Handle "=" (equal) button - Perform calculation
+        // Ако "=" - калкулиране
         else if (buttonText.equals("=")) {
             if (!currentInput.isEmpty() && !operator.isEmpty()) {
                 double secondNum = Double.parseDouble(currentInput);
@@ -130,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                 }
 
-                // Set the result as the current input
                 currentInput = String.valueOf(result);
                 operator = "";
                 resultTV.setText(currentInput);
@@ -139,10 +144,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         else if (buttonText.equals("Rectangle")) {
-            // Създаване на Intent за стартиране на RectangleActivity
-            Intent intent = new Intent(MainActivity.this, RectangleActivity.class);
-            startActivity(intent);
+            String widthStr = inputWidth.getText().toString();
+            String heightStr = inputHeight.getText().toString();
+
+            if (!widthStr.isEmpty() && !heightStr.isEmpty()) {
+                try {
+                    int width = Integer.parseInt(widthStr);
+                    int height = Integer.parseInt(heightStr);
+
+                    RectangleRepository.getInstance().setDimensions(width, height);
+
+                    Intent intent = new Intent(MainActivity.this, RectangleActivity.class);
+                    startActivity(intent);
+                } catch (NumberFormatException e) {
+                    resultTV.setText("Невалиден формат на числата");
+                }
+            } else {
+                resultTV.setText("Моля, въведи ширина и дължина за правоъгълника");
+            }
         }
+
+
     }
     
 }
